@@ -3,7 +3,8 @@ var router = express.Router();
 let userController = require('../controllers/users')
 let bcrypt = require('bcrypt')
 let jwt = require('jsonwebtoken')
-let fs = require('fs')
+let fs = require('fs');
+const { CheckLogin } = require("../utils/authHandler");
 
 router.post('/register', async function (req, res, next) {
     try {
@@ -59,6 +60,9 @@ router.post('/login', async function (req, res, next) {
         })
     }
 
+})
+router.get('/me',CheckLogin,function(req,res,next){
+    res.send(req.user)
 })
 
 
