@@ -6,6 +6,7 @@ let jwt = require('jsonwebtoken')
 let fs = require('fs');
 const { CheckLogin } = require("../utils/authHandler");
 const { ChangePasswordValidator, validatedResult } = require("../utils/validateHandler");
+const { privateKey } = require("../utils/keyLoader");
 
 router.post('/register', async function (req, res, next) {
     try {
@@ -38,11 +39,11 @@ router.post('/login', async function (req, res, next) {
         if (bcrypt.compareSync(password, user.password)) {
             loginCount = 0;
             await user.save()
-            let token = jwt.sign({
-                id: user._id
-            }, 'secret', {
-                expiresIn: '1h'
-            })
+            let token = jwt.sign(
+                { id: user._id },
+                privateKey,
+                { expiresIn: '1h', algorithm: 'RS256' }
+            )
             res.send(token)
         } else {
             user.loginCount++;
