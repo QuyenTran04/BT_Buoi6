@@ -61,10 +61,42 @@ router.post('/login', async function (req, res, next) {
     }
 
 })
-router.get('/me',CheckLogin,function(req,res,next){
+router.get('/me', CheckLogin, function (req, res, next) {
     res.send(req.user)
 })
 
+router.put('/change-password', CheckLogin, async function (req, res, next) {
+    try {
+        let { oldPassword, newPassword } = req.body;
 
+        if (!oldPassword || !newPassword) {
+            return res.status(400).send({
+                message: "Vui lòng nhập đầy đủ mật khẩu cũ và mật khẩu mới"
+            });
+        }
+
+        if (oldPassword === newPassword) {
+            return res.status(400).send({
+                message: "Mật khẩu mới không được trùng với mật khẩu cũ"
+            });
+        }
+
+        // --- Kiểm tra oldPassword ---
+        let isMatch = bcrypt.compareSync(oldPassword, req.user.password);
+        if (!isMatch) {
+            return res.status(400).send({
+                message: "Mật khẩu cũ không đúng"
+            });
+        }
+
+        // --- Cập nhật password mới (pre('save') sẽ tự hash) ---
+        req.user.password = newPassword;
+        await req.user.save();
+
+        res.send({ message: "Đổi mật khẩu thành công" });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+})
 
 module.exports = router;
