@@ -27,12 +27,12 @@ app.use('/api/v1/categories', require('./routes/categories'));
 app.use('/api/v1/auth', require('./routes/auth'));
 
 //connect
-mongoose.connect('mongodb://localhost:27017/NNPTUD-S4');
+mongoose.connect("mongodb://localhost:27017/BT6SangT4");
 mongoose.connection.on('connected', function () {
   console.log("connected");
 })
 mongoose.connection.on('disconnected', function () {
-  console.log("connected");
+  console.log("disconnected");
 })
 
 
