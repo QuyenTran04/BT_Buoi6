@@ -11,9 +11,9 @@ const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
     privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
 });
 
-fs.writeFileSync(path.join(keysDir, 'private.pem'), privateKey);
-fs.writeFileSync(path.join(keysDir, 'public.pem'), publicKey);
+fs.writeFileSync(path.join(keysDir, 'private.key'), privateKey);
+fs.writeFileSync(path.join(keysDir, 'public.key'), publicKey);
 
 console.log('Done!');
-console.log('private.pem:', fs.statSync(path.join(keysDir, 'private.pem')).size, 'bytes');
-console.log('public.pem: ', fs.statSync(path.join(keysDir, 'public.pem')).size, 'bytes');
+console.log('private.key:', fs.statSync(path.join(keysDir, 'private.key')).size, 'bytes');
+console.log('public.key: ', fs.statSync(path.join(keysDir, 'public.key')).size, 'bytes');
